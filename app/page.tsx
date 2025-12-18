@@ -1,12 +1,16 @@
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { SignUpButton } from "@clerk/nextjs";
 import { Link2, BarChart3, Lock, Zap } from "lucide-react";
 
-export default function Home() {
-  // Note: Auth check would normally redirect authenticated users to dashboard
-  // const { userId } = await auth();
-  // if (userId) redirect("/dashboard");
+export default async function Home() {
+  const { userId } = await auth();
+
+  if (userId) {
+    redirect("/dashboard");
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-zinc-950 to-zinc-900">
