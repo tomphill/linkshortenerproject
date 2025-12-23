@@ -37,6 +37,8 @@ export default function RootLayout({
       appearance={{
         theme: shadcn,
       }}
+      signInFallbackRedirectUrl="/dashboard"
+      signUpFallbackRedirectUrl="/dashboard"
     >
       <html lang="en" className="dark">
         <body

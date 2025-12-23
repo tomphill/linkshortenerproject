@@ -130,9 +130,15 @@ This is a link shortener application built with modern web technologies. The app
    - Use generateMetadata for dynamic pages
 
 3. **Performance**
+
    - Use dynamic imports for large components
    - Implement proper loading states
    - Optimize images with next/image
+
+4. **⚠️ CRITICAL: Routing & Middleware**
+   - **NEVER use middleware.ts** - This is deprecated in Next.js 16.x
+   - **ALWAYS use proxy.ts** for request handling and routing logic
+   - The project uses proxy.ts as the modern replacement for middleware functionality
 
 ### Database & ORM
 

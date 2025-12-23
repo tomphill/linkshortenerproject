@@ -1,7 +1,13 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { SignUpButton } from "@clerk/nextjs";
 import { Link2, BarChart3, Lock, Zap } from "lucide-react";
 
@@ -22,7 +28,8 @@ export default async function Home() {
             <span className="block text-primary"> Amplify Your Reach</span>
           </h1>
           <p className="text-xl md:text-2xl text-zinc-400 max-w-2xl">
-            Create short, memorable links in seconds. Track analytics and manage all your URLs in one powerful dashboard.
+            Create short, memorable links in seconds. Track analytics and manage
+            all your URLs in one powerful dashboard.
           </p>
           <div className="flex gap-4 flex-col sm:flex-row">
             <SignUpButton mode="modal">
@@ -41,7 +48,8 @@ export default async function Home() {
             Powerful Features for Modern Links
           </h2>
           <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-            Everything you need to manage, track, and optimize your shortened links
+            Everything you need to manage, track, and optimize your shortened
+            links
           </p>
         </div>
 
@@ -61,7 +69,8 @@ export default async function Home() {
               <BarChart3 className="w-10 h-10 text-primary mb-2" />
               <CardTitle className="text-white">Detailed Analytics</CardTitle>
               <CardDescription>
-                Track clicks, locations, and referrers to understand your audience
+                Track clicks, locations, and referrers to understand your
+                audience
               </CardDescription>
             </CardHeader>
           </Card>
@@ -140,7 +149,8 @@ export default async function Home() {
               Ready to Transform Your Links?
             </h2>
             <p className="text-lg text-zinc-400 max-w-2xl">
-              Join thousands of users who trust our platform for their link management needs
+              Join thousands of users who trust our platform for their link
+              management needs
             </p>
             <SignUpButton mode="modal">
               <Button size="lg" className="text-lg px-8 py-6">
