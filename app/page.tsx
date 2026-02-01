@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { SignUpButton } from "@clerk/nextjs";
-import { Link2, BarChart3, Lock, Zap } from "lucide-react";
+import { Link2, Lock, Zap } from "lucide-react";
 
 export default async function Home() {
   const { userId } = await auth();
@@ -28,8 +28,8 @@ export default async function Home() {
             <span className="block text-primary"> Amplify Your Reach</span>
           </h1>
           <p className="text-xl md:text-2xl text-zinc-400 max-w-2xl">
-            Create short, memorable links in seconds. Track analytics and manage
-            all your URLs in one powerful dashboard.
+            Create short, memorable links in seconds. Manage all your URLs in
+            one powerful dashboard.
           </p>
           <div className="flex gap-4 flex-col sm:flex-row">
             <SignUpButton mode="modal">
@@ -48,29 +48,17 @@ export default async function Home() {
             Powerful Features for Modern Links
           </h2>
           <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-            Everything you need to manage, track, and optimize your shortened
-            links
+            Everything you need to manage and share your shortened links
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-3 gap-6">
           <Card className="bg-zinc-900/50 border-zinc-800">
             <CardHeader>
               <Link2 className="w-10 h-10 text-primary mb-2" />
               <CardTitle className="text-white">Easy Link Shortening</CardTitle>
               <CardDescription>
                 Create short, branded URLs instantly with our simple interface
-              </CardDescription>
-            </CardHeader>
-          </Card>
-
-          <Card className="bg-zinc-900/50 border-zinc-800">
-            <CardHeader>
-              <BarChart3 className="w-10 h-10 text-primary mb-2" />
-              <CardTitle className="text-white">Detailed Analytics</CardTitle>
-              <CardDescription>
-                Track clicks, locations, and referrers to understand your
-                audience
               </CardDescription>
             </CardHeader>
           </Card>
@@ -133,9 +121,9 @@ export default async function Home() {
             <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
               <span className="text-3xl font-bold text-primary">3</span>
             </div>
-            <h3 className="text-xl font-semibold text-white">Share & Track</h3>
+            <h3 className="text-xl font-semibold text-white">Share</h3>
             <p className="text-zinc-400">
-              Share your link and monitor its performance in real-time
+              Share your short link anywhere and reach your audience
             </p>
           </div>
         </div>

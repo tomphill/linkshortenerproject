@@ -11,7 +11,6 @@ This project uses **shadcn/ui** exclusively for all UI components. Do not create
 ## Core Principles
 
 1. **shadcn/ui First**
-
    - Always use shadcn/ui components for UI elements
    - Never create custom components that duplicate shadcn/ui functionality
    - Check [shadcn/ui documentation](https://ui.shadcn.com) before implementing any UI element

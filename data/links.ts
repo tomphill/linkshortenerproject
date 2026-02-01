@@ -26,7 +26,7 @@ export async function getUserLinks(userId: string): Promise<Link[]> {
 export async function createLink(
   userId: string,
   originalUrl: string,
-  customSlug?: string
+  customSlug?: string,
 ): Promise<Link> {
   const shortCode = customSlug || nanoid(8);
 
@@ -53,7 +53,7 @@ export async function updateLink(
   linkId: number,
   userId: string,
   originalUrl: string,
-  customSlug?: string
+  customSlug?: string,
 ): Promise<Link | null> {
   // First verify ownership
   const [existingLink] = await db
@@ -88,7 +88,7 @@ export async function updateLink(
  */
 export async function deleteLink(
   linkId: number,
-  userId: string
+  userId: string,
 ): Promise<boolean> {
   // First verify ownership
   const [existingLink] = await db

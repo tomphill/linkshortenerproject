@@ -54,26 +54,22 @@ This is a link shortener application built with modern web technologies. The app
 ### General Principles
 
 1. **Type Safety First**
-
    - Always use TypeScript with strict mode enabled
    - Avoid `any` types; use `unknown` or proper type definitions
    - Export and reuse type definitions across files
 
 2. **Component Organization**
-
    - Use functional components with TypeScript
    - Place reusable components in appropriate directories
    - Keep components focused and single-responsibility
 
 3. **File Naming**
-
    - Use kebab-case for directories: `link-manager/`
    - Use PascalCase for React components: `LinkCard.tsx`
    - Use camelCase for utilities and hooks: `useLinks.ts`
    - Use kebab-case for regular TypeScript files: `api-client.ts`
 
 4. **Import Organization**
-
    - Group imports: external packages → internal modules → types → styles
    - Use path aliases (`@/`) defined in tsconfig.json
    - Avoid circular dependencies
@@ -88,18 +84,15 @@ This is a link shortener application built with modern web technologies. The app
 ### Next.js Specific
 
 1. **App Router Convention**
-
    - Use Server Components by default
    - Add `"use client"` directive only when needed
    - Follow Next.js 16.x file conventions (page.tsx, layout.tsx, etc.)
 
 2. **Metadata**
-
    - Export metadata objects for SEO
    - Use generateMetadata for dynamic pages
 
 3. **Performance**
-
    - Use dynamic imports for large components
    - Implement proper loading states
    - Optimize images with next/image
@@ -112,7 +105,6 @@ This is a link shortener application built with modern web technologies. The app
 ### Database & ORM
 
 1. **Drizzle ORM Patterns**
-
    - Define schemas in `db/schema.ts`
    - Use Drizzle's type-safe query builder
    - Export types from schema definitions
@@ -126,7 +118,6 @@ This is a link shortener application built with modern web technologies. The app
 ### Authentication
 
 1. **Clerk Integration**
-
    - Wrap app with ClerkProvider in root layout
    - Use Clerk hooks for auth state
    - Protect routes with Clerk middleware
@@ -142,7 +133,6 @@ This is a link shortener application built with modern web technologies. The app
 ### Code Comments
 
 1. **When to Comment**
-
    - Complex business logic
    - Non-obvious algorithmic decisions
    - Workarounds for known issues
@@ -166,7 +156,6 @@ This is a link shortener application built with modern web technologies. The app
 ### Component Documentation
 
 1. **Props Interface**
-
    - Document complex props with JSDoc
    - Provide examples for non-trivial usage
    - Export prop types for reuse

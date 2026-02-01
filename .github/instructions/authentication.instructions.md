@@ -27,7 +27,6 @@ This document provides specific guidelines for implementing and working with aut
 ### Redirect Rules
 
 1. **Unauthenticated users accessing `/dashboard`:**
-
    - Redirect to homepage `/` or show Clerk sign-in modal
 
 2. **Authenticated users accessing homepage `/`:**
@@ -173,11 +172,9 @@ export async function updateLink(linkId: string, data: UpdateData) {
 ## Troubleshooting
 
 - **Issue:** User not redirecting after sign-in
-
   - **Solution:** Ensure afterSignIn/afterSignUp URLs are configured in Clerk Dashboard
 
 - **Issue:** Auth state not updating
-
   - **Solution:** Check that ClerkProvider wraps entire app in root layout
 
 - **Issue:** Protected route accessible without auth

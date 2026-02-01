@@ -15,7 +15,7 @@ const createLinkSchema = z.object({
     .string()
     .regex(
       /^[a-zA-Z0-9_-]*$/,
-      "Only letters, numbers, hyphens, and underscores allowed"
+      "Only letters, numbers, hyphens, and underscores allowed",
     )
     .min(3, "Custom slug must be at least 3 characters")
     .max(20, "Custom slug must be at most 20 characters")
@@ -38,7 +38,7 @@ export interface CreateLinkResult {
  * Server action to create a new shortened link
  */
 export async function createLink(
-  input: CreateLinkInput
+  input: CreateLinkInput,
 ): Promise<CreateLinkResult> {
   try {
     // Check authentication
@@ -83,7 +83,7 @@ const updateLinkSchema = z.object({
     .string()
     .regex(
       /^[a-zA-Z0-9_-]*$/,
-      "Only letters, numbers, hyphens, and underscores allowed"
+      "Only letters, numbers, hyphens, and underscores allowed",
     )
     .min(3, "Custom slug must be at least 3 characters")
     .max(20, "Custom slug must be at most 20 characters")
@@ -106,7 +106,7 @@ export interface UpdateLinkResult {
  * Server action to update an existing link
  */
 export async function updateLink(
-  input: UpdateLinkInput
+  input: UpdateLinkInput,
 ): Promise<UpdateLinkResult> {
   try {
     // Check authentication
@@ -127,7 +127,7 @@ export async function updateLink(
       validated.linkId,
       userId,
       validated.url,
-      customSlug
+      customSlug,
     );
 
     if (!updatedLink) {
@@ -170,7 +170,7 @@ export interface DeleteLinkResult {
  * Server action to delete a link
  */
 export async function deleteLink(
-  input: DeleteLinkInput
+  input: DeleteLinkInput,
 ): Promise<DeleteLinkResult> {
   try {
     // Check authentication
