@@ -10,7 +10,10 @@ import {
 import { revalidatePath } from "next/cache";
 
 const createLinkSchema = z.object({
-  url: z.string().url("Please enter a valid URL").max(2048, "URL must be at most 2048 characters"),
+  url: z
+    .string()
+    .url("Please enter a valid URL")
+    .max(2048, "URL must be at most 2048 characters"),
   customSlug: z
     .string()
     .regex(
@@ -81,7 +84,10 @@ export async function createLink(
 
 const updateLinkSchema = z.object({
   linkId: z.number(),
-  url: z.string().url("Please enter a valid URL").max(2048, "URL must be at most 2048 characters"),
+  url: z
+    .string()
+    .url("Please enter a valid URL")
+    .max(2048, "URL must be at most 2048 characters"),
   customSlug: z
     .string()
     .regex(
