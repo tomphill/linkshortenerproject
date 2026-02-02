@@ -10,7 +10,7 @@ import {
 import { revalidatePath } from "next/cache";
 
 const createLinkSchema = z.object({
-  url: z.string().url("Please enter a valid URL"),
+  url: z.string().url("Please enter a valid URL").max(2048, "URL must be at most 2048 characters"),
   customSlug: z
     .string()
     .regex(
@@ -71,14 +71,17 @@ export async function createLink(
       return { error: "This custom slug is already taken" };
     }
 
-    console.error("Error creating link:", error);
+    // Only log detailed errors in development to prevent sensitive data exposure
+    if (process.env.NODE_ENV === "development") {
+      console.error("Error creating link:", error);
+    }
     return { error: "Failed to create link. Please try again." };
   }
 }
 
 const updateLinkSchema = z.object({
   linkId: z.number(),
-  url: z.string().url("Please enter a valid URL"),
+  url: z.string().url("Please enter a valid URL").max(2048, "URL must be at most 2048 characters"),
   customSlug: z
     .string()
     .regex(
@@ -148,7 +151,10 @@ export async function updateLink(
       return { error: "This custom slug is already taken" };
     }
 
-    console.error("Error updating link:", error);
+    // Only log detailed errors in development to prevent sensitive data exposure
+    if (process.env.NODE_ENV === "development") {
+      console.error("Error updating link:", error);
+    }
     return { error: "Failed to update link. Please try again." };
   }
 }
@@ -198,7 +204,10 @@ export async function deleteLink(
       return { error: error.issues[0].message };
     }
 
-    console.error("Error deleting link:", error);
+    // Only log detailed errors in development to prevent sensitive data exposure
+    if (process.env.NODE_ENV === "development") {
+      console.error("Error deleting link:", error);
+    }
     return { error: "Failed to delete link. Please try again." };
   }
 }

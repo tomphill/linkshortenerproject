@@ -21,6 +21,25 @@ export async function GET(
       return NextResponse.json({ error: "Link not found" }, { status: 404 });
     }
 
+    // Validate URL scheme to prevent open redirect attacks
+    let url: URL;
+    try {
+      url = new URL(link.originalUrl);
+    } catch {
+      return NextResponse.json(
+        { error: "Invalid URL stored in database" },
+        { status: 400 },
+      );
+    }
+
+    // Only allow http and https schemes
+    if (url.protocol !== "http:" && url.protocol !== "https:") {
+      return NextResponse.json(
+        { error: "Invalid URL scheme" },
+        { status: 400 },
+      );
+    }
+
     // Redirect to the original URL
     return NextResponse.redirect(link.originalUrl, 301);
   } catch (error) {
