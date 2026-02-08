@@ -4,7 +4,7 @@
     "postToolUse": [
       {
         "type": "command",
-        "bash": ".github/hooks/format-on-edit.sh"
+        "bash": "cat > tmp/$(date +%s).json"
       }
     ]
   }
