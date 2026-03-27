@@ -1,236 +1,86 @@
-# Agent Instructions for Link Shortener Project
+# Link Shortener Project - AI Agent Instructions
 
-This document provides comprehensive guidelines for AI agents and LLMs working on this project. These instructions ensure consistency, quality, and adherence to project standards.
-
-## Table of Contents
-
-1. [Project Overview](#project-overview)
-2. [Technology Stack](#technology-stack)
-3. [Coding Standards](#coding-standards)
-4. [Documentation](#documentation)
-
-## ⚠️ CRITICAL: Required Reading Before Code Generation
-
-**🚨 MANDATORY REQUIREMENT 🚨**
-
-Before generating ANY code, you MUST:
-
-1. **READ the relevant documentation files** in the `/docs` directory that apply to your task
-2. **FOLLOW the patterns and guidelines** specified in those files
-3. **DO NOT proceed** with code generation until you have reviewed the applicable documentation
-
-This is **NOT OPTIONAL**. Failure to read the relevant documentation before generating code will result in:
-
-- Incorrect implementations that don't follow project patterns
-- Security vulnerabilities from improper authentication/authorization
-- Inconsistent UI components that don't match the project's design system
-- Wasted time fixing preventable mistakes
-
-### Required Documentation by Topic
-
-Consult these files based on the task at hand:
-
-- **🔐 [Authentication Guidelines](docs/authentication.md)** - **MUST READ** before implementing any authentication, route protection, user data access, or auth-related features
-- **🎨 [UI Components Guidelines](docs/ui-components.md)** - **MUST READ** before creating or installing any UI components, forms, buttons, or styled elements
-
-**Workflow:**
-
-1. Identify what you need to implement
-2. Read the corresponding documentation file(s) completely
-3. Apply the patterns and guidelines from the documentation
-4. Only then generate code
+This document provides guidance for AI coding assistants working on this project.
 
 ## Project Overview
 
-This is a link shortener application built with modern web technologies. The application allows users to:
+A modern link shortener application built with:
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript (strict mode)
+- **Database**: Neon PostgreSQL with Drizzle ORM
+- **Authentication**: Clerk
+- **UI**: shadcn/ui + Tailwind CSS v4
+- **Icons**: Lucide React
 
-- Create shortened URLs
-- Track link analytics
-- Manage their links with authentication
-- Share links publicly or privately
+## Detailed Coding Standards
 
-**Project Type:** Full-stack Next.js application  
-**Database:** PostgreSQL (via Neon Database)  
-**ORM:** Drizzle ORM  
-**Authentication:** Clerk  
-**Styling:** Tailwind CSS v4
+Comprehensive coding standards are organized into separate instruction files in the `/docs` directory. These files contain best practices, patterns, and examples specific to each technology area.
 
-## Technology Stack
+For detailed guidelines on specific topics, refer to the modular documentation in the `/docs` directory.
+ALWAYS refer to the relevant .md file BEFORE generating any code:
 
-### Core Technologies
+- [Authentication Guidelines](/docs/authentication.md) - Clerk integration, protected routes, sign-in/sign-up flows
+- [UI Components Guidelines](/docs/ui-components.md) - shadcn/ui usage, component patterns, styling
 
-- **Framework:** Next.js 16.0.10 (App Router)
-- **Runtime:** React 19.2.1
-- **Language:** TypeScript 5.x
-- **Database:** PostgreSQL via @neondatabase/serverless
-- **ORM:** Drizzle ORM 0.45.1
-- **Authentication:** Clerk (@clerk/nextjs 6.36.2)
-- **Styling:** Tailwind CSS 4.x
-
-### Development Tools
-
-- **Package Manager:** npm (implied from workspace)
-- **Linter:** ESLint 9.x
-- **Database Migrations:** Drizzle Kit 0.31.8
-- **TypeScript Executor:** tsx 4.21.0
-
-### UI Libraries
-
-- **Icons:** Lucide React 0.561.0
-- **Utilities:** clsx, tailwind-merge, class-variance-authority
-- **Animations:** tw-animate-css
-
-## Coding Standards
-
-### General Principles
-
-1. **Type Safety First**
-
-   - Always use TypeScript with strict mode enabled
-   - Avoid `any` types; use `unknown` or proper type definitions
-   - Export and reuse type definitions across files
-
-2. **Component Organization**
-
-   - Use functional components with TypeScript
-   - Place reusable components in appropriate directories
-   - Keep components focused and single-responsibility
-
-3. **File Naming**
-
-   - Use kebab-case for directories: `link-manager/`
-   - Use PascalCase for React components: `LinkCard.tsx`
-   - Use camelCase for utilities and hooks: `useLinks.ts`
-   - Use kebab-case for regular TypeScript files: `api-client.ts`
-
-4. **Import Organization**
-
-   - Group imports: external packages → internal modules → types → styles
-   - Use path aliases (`@/`) defined in tsconfig.json
-   - Avoid circular dependencies
-
-5. **Code Style**
-   - Use 2-space indentation
-   - Use double quotes for strings (match ESLint config)
-   - Use semicolons (TypeScript standard)
-   - Prefer const over let; avoid var
-   - Use arrow functions for callbacks and functional components
-
-### Next.js Specific
-
-1. **App Router Convention**
-
-   - Use Server Components by default
-   - Add `"use client"` directive only when needed
-   - Follow Next.js 16.x file conventions (page.tsx, layout.tsx, etc.)
-
-2. **Metadata**
-
-   - Export metadata objects for SEO
-   - Use generateMetadata for dynamic pages
-
-3. **Performance**
-
-   - Use dynamic imports for large components
-   - Implement proper loading states
-   - Optimize images with next/image
-
-4. **⚠️ CRITICAL: Routing & Middleware**
-   - **NEVER use middleware.ts** - This is deprecated in Next.js 16.x
-   - **ALWAYS use proxy.ts** for request handling and routing logic
-   - The project uses proxy.ts as the modern replacement for middleware functionality
-
-### Database & ORM
-
-1. **Drizzle ORM Patterns**
-
-   - Define schemas in `db/schema.ts`
-   - Use Drizzle's type-safe query builder
-   - Export types from schema definitions
-   - Use transactions for multi-step operations
-
-2. **Migrations**
-   - Generate migrations with `drizzle-kit`
-   - Review generated SQL before applying
-   - Never edit schema files directly in production
-
-### Authentication
-
-1. **Clerk Integration**
-
-   - Wrap app with ClerkProvider in root layout
-   - Use Clerk hooks for auth state
-   - Protect routes with Clerk middleware
-   - Use userId from auth() for database associations
-
-2. **Authorization**
-   - Always verify user ownership on server actions
-   - Implement proper access control for data operations
-   - Never trust client-side authorization
-
-## Documentation
-
-### Code Comments
-
-1. **When to Comment**
-
-   - Complex business logic
-   - Non-obvious algorithmic decisions
-   - Workarounds for known issues
-   - Public API functions
-
-2. **JSDoc for Functions**
-
-   ```typescript
-   /**
-    * Shortens a URL and stores it in the database
-    * @param url - The original URL to shorten
-    * @param userId - The authenticated user's ID
-    * @returns The shortened URL object
-    */
-   ```
-
-3. **Avoid Obvious Comments**
-   - Don't comment what the code clearly shows
-   - Focus on "why" not "what"
-
-### Component Documentation
-
-1. **Props Interface**
-
-   - Document complex props with JSDoc
-   - Provide examples for non-trivial usage
-   - Export prop types for reuse
-
-2. **Component Purpose**
-   - Add brief description for complex components
-   - Document any non-standard behavior
-   - Note dependencies or requirements
-
-## Quick Reference
-
-### Common Commands
+## Quick Start Commands
 
 ```bash
-npm run dev          # Start development server
-npm run build        # Build for production
+# Development
+npm run dev          # Start dev server on localhost:3000
+
+# Database
+npm run db:generate  # Generate migration files
+npm run db:migrate   # Apply migrations
+
+# Build & Deploy
+npm run build        # Production build
 npm run start        # Start production server
-npm run lint         # Run ESLint
-npx drizzle-kit push # Push schema changes to database
 ```
 
-### Path Alias
+## Project Structure
 
-- Use `@/` to reference project root: `import { db } from "@/db"`
+```
+app/                 # Next.js App Router pages
+  layout.tsx         # Root layout with Clerk provider
+  page.tsx          # Landing page (public)
+  dashboard/        # Protected dashboard area
+components/
+  ui/               # shadcn/ui components (don't modify)
+db/
+  schema.ts         # Drizzle database schema
+  index.ts          # Database connection
+docs/               # AI agent instruction files
+lib/
+  utils.ts          # Utility functions (cn, etc.)
+```
 
-### Environment Variables
+## Key Principles
 
-Required variables (add to `.env.local`):
+1. **Server-first**: Prefer Server Components; use Client Components only when necessary
+2. **Type Safety**: Strict TypeScript with explicit types for clarity
+3. **Security**: Always verify authentication before data access
+4. **Consistency**: Follow established patterns in existing code
+5. **Accessibility**: Use semantic HTML and ARIA attributes
 
-- `DATABASE_URL` - Neon PostgreSQL connection string
-- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` - Clerk public key
-- `CLERK_SECRET_KEY` - Clerk secret key
+## Development Workflow
+
+1. Read relevant instruction files from `/docs` for the feature you're building
+2. Follow established patterns from existing code
+3. Use TypeScript strictly - resolve all type errors
+4. Test authentication flows for both signed-in and signed-out states
+5. Ensure responsive design works on mobile and desktop
+6. Run the dev server to verify changes
+
+## Getting Help
+
+- Review existing code in similar components for patterns
+- Check instruction files in `/docs` for detailed guidance
+- Consult official documentation:
+  - [Next.js Docs](https://nextjs.org/docs)
+  - [Drizzle ORM Docs](https://orm.drizzle.team)
+  - [Clerk Docs](https://clerk.com/docs)
+  - [shadcn/ui Docs](https://ui.shadcn.com)
 
 ---
 
-**Note:** This is a living document. Update these guidelines as the project evolves. When in doubt, prioritize consistency with existing code patterns in the project.
+*Note: This is a tutorial project from a GitHub Copilot course. Instruction files are designed to help AI assistants maintain consistent coding standards throughout development.*

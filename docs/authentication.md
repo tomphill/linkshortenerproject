@@ -1,184 +1,98 @@
 # Authentication Guidelines
 
-This document provides specific guidelines for implementing and working with authentication in this project.
+## Core Rules
 
-## Core Principles
+**All authentication in this project is handled exclusively by Clerk.**  
+Do not implement, suggest, or use any other authentication methods (NextAuth, custom JWT, sessions, etc.).
 
-**IMPORTANT:** All authentication in this application is handled exclusively by Clerk. No other authentication methods, libraries, or custom auth implementations should be used.
+## Protected Routes
 
-## Authentication Provider
+### Dashboard Route
+- The `/dashboard` page is a protected route
+- Users MUST be logged in to access this page
+- Use Clerk's authentication helpers to verify user status
+- Redirect unauthenticated users to sign-in
 
-- **Provider:** Clerk (@clerk/nextjs 6.36.2)
-- **Strategy:** Modal-based sign-in/sign-up
-- **Session Management:** Handled automatically by Clerk
+### Homepage Behavior
+- If a logged-in user accesses the homepage (`/`), redirect them to `/dashboard`
+- Only show the landing page to unauthenticated visitors
 
-## Route Protection & Redirects
+## Sign In / Sign Up Flow
 
-### Protected Routes
+**Always use modal mode for authentication:**
+- Sign in should launch as a modal overlay
+- Sign up should launch as a modal overlay
+- Use Clerk's built-in modal components (not redirect flows)
 
-- `/dashboard` - **MUST** require authentication
-- All routes under `/dashboard/*` should inherit this protection
-- Use Clerk middleware or auth checks to enforce protection
+## Implementation Patterns
 
-### Redirect Rules
+### Protecting Routes (Server Components)
+```tsx
+import { auth } from '@clerk/nextjs/server';
+import { redirect } from 'next/navigation';
 
-1. **Unauthenticated users accessing `/dashboard`:**
-
-   - Redirect to homepage `/` or show Clerk sign-in modal
-
-2. **Authenticated users accessing homepage `/`:**
-   - Redirect to `/dashboard`
-
-### Implementation Pattern
-
-```typescript
-// In middleware.ts or page component
-import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
-
-// Protect dashboard route
 export default async function DashboardPage() {
   const { userId } = await auth();
-
+  
   if (!userId) {
-    redirect("/");
+    redirect('/sign-in');
   }
-
-  // Dashboard content
+  
+  // Protected content here
 }
+```
 
-// Redirect from homepage if authenticated
+### Checking Auth Status (Client Components)
+```tsx
+'use client';
+
+import { useUser } from '@clerk/nextjs';
+
+export function MyComponent() {
+  const { isSignedIn, user, isLoaded } = useUser();
+  
+  if (!isLoaded) return <div>Loading...</div>;
+  
+  // Use isSignedIn to conditionally render
+}
+```
+
+### Redirecting Logged-In Users
+```tsx
+// In homepage or public pages
+import { auth } from '@clerk/nextjs/server';
+import { redirect } from 'next/navigation';
+
 export default async function HomePage() {
   const { userId } = await auth();
-
+  
   if (userId) {
-    redirect("/dashboard");
+    redirect('/dashboard');
   }
-
-  // Homepage content
+  
+  // Show landing page for unauthenticated users
 }
 ```
 
-## Sign In / Sign Up UI
+## Key Clerk Components
 
-**REQUIRED:** All sign-in and sign-up flows must launch as modals, not full-page forms.
+- `<ClerkProvider>` - Wraps the app in app/layout.tsx
+- `<SignInButton>` - Triggers sign-in modal
+- `<SignUpButton>` - Triggers sign-up modal
+- `<UserButton>` - Shows user avatar with dropdown menu
+- `auth()` - Server-side auth helper
+- `useUser()` - Client-side auth hook
 
-### Modal Configuration
+## Security Checklist
 
-Use Clerk's built-in modal components:
+Before implementing any feature that accesses user data:
+- ✅ Verify user is authenticated
+- ✅ Check user owns the resource being accessed
+- ✅ Use userId from Clerk, never trust client-provided IDs
+- ✅ Implement authorization checks in Server Components or API routes
 
-```tsx
-import { SignInButton, SignUpButton } from "@clerk/nextjs";
+## References
 
-// Sign In
-<SignInButton mode="modal">
-  <button>Sign In</button>
-</SignInButton>
-
-// Sign Up
-<SignUpButton mode="modal">
-  <button>Sign Up</button>
-</SignUpButton>
-```
-
-### DO NOT:
-
-- Create custom authentication forms
-- Implement password validation or storage
-- Build manual session management
-- Use alternative auth libraries (NextAuth, Passport, etc.)
-
-## Clerk Integration Checklist
-
-### Root Layout Setup
-
-- [ ] Wrap app with `<ClerkProvider>` in root layout
-- [ ] Configure Clerk environment variables
-
-### Environment Variables
-
-Required in `.env.local`:
-
-```
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_...
-CLERK_SECRET_KEY=sk_...
-```
-
-### Common Clerk Hooks & Functions
-
-**Client Components:**
-
-```typescript
-import { useUser, useAuth } from "@clerk/nextjs";
-
-// Get current user
-const { user, isLoaded, isSignedIn } = useUser();
-
-// Get auth state
-const { userId, sessionId } = useAuth();
-```
-
-**Server Components/Actions:**
-
-```typescript
-import { auth, currentUser } from "@clerk/nextjs/server";
-
-// Get userId
-const { userId } = await auth();
-
-// Get full user object
-const user = await currentUser();
-```
-
-## Database User Association
-
-When storing user-related data:
-
-1. Use `userId` from Clerk as the foreign key
-2. Never store passwords or sensitive auth data
-3. Always verify ownership on server actions:
-
-```typescript
-export async function updateLink(linkId: string, data: UpdateData) {
-  const { userId } = await auth();
-
-  if (!userId) {
-    throw new Error("Unauthorized");
-  }
-
-  // Verify ownership
-  const link = await db.query.links.findFirst({
-    where: eq(links.id, linkId),
-  });
-
-  if (link.userId !== userId) {
-    throw new Error("Forbidden");
-  }
-
-  // Proceed with update
-}
-```
-
-## Security Best Practices
-
-1. **Never trust client-side auth state** - Always verify on server
-2. **Use Clerk's built-in middleware** - Don't reinvent route protection
-3. **Validate userId on all server actions** - Check auth before data operations
-4. **Leverage Clerk's session management** - Don't implement custom tokens
-
-## Troubleshooting
-
-- **Issue:** User not redirecting after sign-in
-
-  - **Solution:** Ensure afterSignIn/afterSignUp URLs are configured in Clerk Dashboard
-
-- **Issue:** Auth state not updating
-
-  - **Solution:** Check that ClerkProvider wraps entire app in root layout
-
-- **Issue:** Protected route accessible without auth
-  - **Solution:** Add auth check at component/middleware level, not just UI
-
----
-
-**Remember:** When in doubt, consult [Clerk's Next.js documentation](https://clerk.com/docs/quickstarts/nextjs). All auth concerns should be solved with Clerk's built-in features.
+- [Clerk Next.js Documentation](https://clerk.com/docs/quickstarts/nextjs)
+- [Protecting Routes](https://clerk.com/docs/guides/basic-rbac)
+- [Authentication Helpers](https://clerk.com/docs/references/nextjs/auth)

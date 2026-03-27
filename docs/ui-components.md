@@ -1,103 +1,125 @@
 # UI Components Guidelines
 
-## Overview
+## Core Rules
 
-This project uses **shadcn/ui** exclusively for all UI components. Do not create custom components when shadcn/ui provides an equivalent.
+**All UI elements MUST use shadcn/ui components.**  
+Do not create custom UI components from scratch. Always leverage the existing shadcn/ui component library.
 
-## Core Principles
+## Component Usage
 
-1. **shadcn/ui First**
+### Available Components
+- Components are located in `components/ui/`
+- Currently available: Button, Card
+- To add more components, use the shadcn/ui CLI (see installation section)
 
-   - Always use shadcn/ui components for UI elements
-   - Never create custom components that duplicate shadcn/ui functionality
-   - Check [shadcn/ui documentation](https://ui.shadcn.com) before implementing any UI element
+### Installation Command
+```bash
+npx shadcn@latest add [component-name]
+```
 
-2. **Component Installation**
+Examples:
+```bash
+npx shadcn@latest add input
+npx shadcn@latest add dialog
+npx shadcn@latest add form
+```
 
-   ```bash
-   npx shadcn@latest add <component-name>
-   ```
+## Implementation Patterns
 
-   - Install components as needed using the shadcn CLI
-   - Components are added to `components/ui/` directory
-   - Each component is customizable through the components.json config
+### Using Existing Components
+```tsx
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-3. **Available Components**
-   Common shadcn/ui components include:
-   - **Forms:** Button, Input, Textarea, Select, Checkbox, RadioGroup, Switch, Label
-   - **Layout:** Card, Separator, Tabs, Dialog, Sheet, Popover
-   - **Feedback:** Alert, Toast, Badge, Progress, Skeleton
-   - **Data Display:** Table, Avatar, Accordion, Tooltip
-   - **Navigation:** Command, NavigationMenu, DropdownMenu
-
-## Implementation Guidelines
-
-### Using Components
-
-```typescript
-import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-
-export function MyComponent() {
+export function Example() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Title</CardTitle>
+        <CardTitle>Example Card</CardTitle>
       </CardHeader>
       <CardContent>
-        <Input placeholder="Enter text" />
-        <Button>Submit</Button>
+        <Button>Click me</Button>
       </CardContent>
     </Card>
   );
 }
 ```
 
+### DO NOT Create Custom Components
+❌ **Wrong:**
+```tsx
+// Don't do this
+export function CustomButton({ children }: { children: React.ReactNode }) {
+  return <button className="px-4 py-2 bg-blue-500...">{children}</button>;
+}
+```
+
+✅ **Correct:**
+```tsx
+// Use shadcn/ui instead
+import { Button } from '@/components/ui/button';
+
+export function MyFeature() {
+  return <Button>Click me</Button>;
+}
+```
+
+## Styling Components
+
 ### Customization
+- Use Tailwind CSS classes to customize shadcn/ui components
+- Leverage component variants provided by shadcn/ui
+- Use the `cn()` utility from `lib/utils.ts` for conditional classes
 
-- Use `className` prop with Tailwind utilities for styling
-- Use variant props provided by each component
-- Modify component source in `components/ui/` if needed for project-wide changes
+```tsx
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
-### Composition Over Creation
-
-- Compose existing shadcn/ui components to build complex UI
-- Create wrapper components that use shadcn/ui internally
-- Only create truly custom components when shadcn/ui has no equivalent
-
-## Example: DON'T vs DO
-
-### ❌ DON'T - Create Custom Component
-
-```typescript
-// DON'T create this
-export function CustomButton({ children, onClick }) {
+export function CustomizedButton({ isActive }: { isActive: boolean }) {
   return (
-    <button className="px-4 py-2 bg-blue-500 rounded" onClick={onClick}>
-      {children}
-    </button>
+    <Button 
+      variant="outline"
+      className={cn("w-full", isActive && "bg-accent")}
+    >
+      Toggle
+    </Button>
   );
 }
 ```
 
-### ✅ DO - Use shadcn/ui Component
+## Component Library
 
-```typescript
-import { Button } from "@/components/ui/button";
+### When You Need a New Component
+1. Check if shadcn/ui provides it: [shadcn/ui Components](https://ui.shadcn.com/docs/components)
+2. Install it using the CLI command
+3. Import and use it in your code
+4. Never build a custom alternative
 
-export function MyFeature() {
-  return <Button onClick={handleClick}>Click Me</Button>;
+### Icons
+- Use Lucide React for all icons
+- Icons are included with shadcn/ui components
+
+```tsx
+import { Link as LinkIcon, Copy, Trash } from 'lucide-react';
+
+export function IconExample() {
+  return (
+    <Button>
+      <LinkIcon className="mr-2 h-4 w-4" />
+      Create Link
+    </Button>
+  );
 }
 ```
 
-## Quick Reference
+## Best Practices
 
-- **Documentation:** https://ui.shadcn.com
-- **Component Location:** `components/ui/`
-- **Configuration:** `components.json`
-- **Installation Command:** `npx shadcn@latest add [component]`
+1. **Consistency**: Using shadcn/ui ensures a consistent look and feel
+2. **Accessibility**: shadcn/ui components are built with accessibility in mind
+3. **Maintainability**: Updates to the design system are easier to manage
+4. **Do Not Modify**: Never edit files in `components/ui/` directly - these are managed by shadcn/ui
+5. **Composition**: Build features by composing shadcn/ui components, not by creating new primitives
 
 ---
 
-**Remember:** If you're about to create a UI component, check shadcn/ui first. It likely already exists.
+*For the complete list of available components and their documentation, visit [ui.shadcn.com](https://ui.shadcn.com)*
